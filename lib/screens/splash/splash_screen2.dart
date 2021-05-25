@@ -20,7 +20,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
   void initState() {
     super.initState();
     Timer(
-        Duration(seconds: 1),
+        Duration(seconds: 3),
             () => Navigator.push(
             context,
             PageTransition(
@@ -29,6 +29,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,

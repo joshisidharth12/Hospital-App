@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/constants.dart';
 import 'package:hospital_app/screens/onboarding/OnBoardingScreen.dart';
-import 'package:hospital_app/screens/sign_up_screen/sign_up.dart';
+import 'package:hospital_app/screens/sign_up_screen/SignUpOption.dart';
 import 'package:hospital_app/size_config.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingBody extends StatefulWidget {
 
@@ -35,13 +36,14 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
   ];
 
   @override
-  void initState() {
+  void initState()   {
     super.initState();
     pageController = PageController();
   }
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       body: Column(
         children: [
@@ -84,13 +86,13 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
                   ),
                   Spacer(),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () async {
                       if(pageController.hasClients ){
                         pageController.animateToPage(currentpage+1, duration: kAnimationDuration, curve: Curves.easeInOut);
                       }
                       if(currentpage == 2){
                         Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeft,
-                            duration: kAnimationDuration, child: Signup()));
+                            duration: kAnimationDuration, child: SignUpOption()));
 
                       }
 

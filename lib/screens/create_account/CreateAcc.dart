@@ -1,11 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:hospital_app/CustomInput.dart';
+import 'package:hospital_app/Validators.dart';
 import 'package:hospital_app/constants.dart';
 import 'package:hospital_app/defaultButton.dart';
+import 'package:hospital_app/screens/home_screen/home_screen.dart';
 import 'package:hospital_app/screens/otp/otp_screen.dart';
 import 'package:hospital_app/size_config.dart';
 import 'package:page_transition/page_transition.dart';
 
-class CreateAccount extends StatelessWidget {
+class CreateAccount extends StatefulWidget {
+  @override
+  _CreateAccountState createState() => _CreateAccountState();
+}
+
+class _CreateAccountState extends State<CreateAccount> {
+
+  TextEditingController _namecontroller ;
+  TextEditingController _emailcontroller ;
+  TextEditingController _passcontroller ;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    _namecontroller = TextEditingController();
+    _emailcontroller = TextEditingController();
+    _passcontroller = TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,46 +55,40 @@ class CreateAccount extends StatelessWidget {
                 ),
               ],
             ),
-            Spacer(
-              flex: 1,
-            ),
-            TextFormField(
-                decoration: InputDecoration(
-              labelText: "Your Name",
-            )),
-            Spacer(
-              flex: 1,
-            ),
-            TextFormField(
-                keyboardType: TextInputType.number,
-                maxLength: 10,
-                decoration: InputDecoration(
-                  labelText: "Mobile Number",
-                  counterText: "",
-                )),
-            Spacer(
-              flex: 1,
-            ),
-            TextFormField(
-                decoration: InputDecoration(
-              labelText: "Email",
-            )),
             Spacer(),
-            TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                    labelText: "Password",
-                    suffixIcon: Icon(Icons.remove_red_eye_outlined))),
+            Form(
+              key: _formKey,
+                child: Column(
+                  children: [
+                    CustomInput(
+                      hintText: "Name",
+                      iconImage: "assets/images/profile.png",
+                      validation: validateName,
+                    ),
+                    SizedBox(height: getProportionateScreenHeight(20),),
+                    CustomInput(
+                      hintText: "Email",
+                      iconImage: "assets/images/profile.png",
+                      keyBoardType: TextInputType.emailAddress,
+                      validation: validateEmail,
+                    ),
+                    SizedBox(height: getProportionateScreenHeight(20),),
+                    CustomInput(
+                      hintText: "Password",
+                      iconImage: "assets/images/lock.png",
+                      isPasswordField: true,
+                      validation: validatePass,
+                    ),
+                  ],
+                )
+            ),
             Spacer(),
             DefaultButton(
               text: "CREATE ACCOUNT",
               onPressed: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: OtpScreen(),
-                        type: PageTransitionType.rightToLeft,
-                        duration: kAnimationDuration));
+                if(_formKey.currentState.validate()){
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+                }
               },
             ),
             Spacer(

@@ -14,7 +14,7 @@ class DefaultButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return /*GestureDetector(
       onTap: onPressed,
       child: Container(
         height: getProportionateScreenHeight(50),
@@ -39,6 +39,28 @@ class DefaultButton extends StatelessWidget {
               fontWeight: FontWeight.w700),
         ),
       ),
-    );
+    );*/
+      ConstrainedBox(
+        constraints: BoxConstraints.tightFor(
+          height: getProportionateScreenHeight(50),
+          width: getProportionateScreenWidth(311),
+        ),
+        child: ElevatedButton(
+            onPressed: onPressed,
+            style: ElevatedButton.styleFrom(
+              elevation: 10,
+              shadowColor: Color(0xFF4157FF).withOpacity(0.4),
+              primary: Color(0xFF4157FF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100),
+              ),
+              textStyle: TextStyle(
+                  fontSize: getProportionateScreenWidth(16),
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700),
+            ),
+            child: Text(text)),
+      );
+
   }
 }
