@@ -1,5 +1,7 @@
-# hospital_app
+# Hospiral App Case Study
 
+
+![Hospital App Demo](assets/gifs/sample_run.gif)
 A new Flutter application.
 
 ## Getting Started
