@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _auth.authStateChanges().listen((user) {
       if (user != null) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (_) => SignUpOption()));
+            context, MaterialPageRoute(builder: (_) => HomePage()));
       }
     });
   }
@@ -42,6 +42,33 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
+  login() async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      try {
+        UserCredential user = await _auth.signInWithEmailAndPassword(
+            email: _email, password: _password);
+      } catch (e) {
+        showError(e.message);
+      }
+    }
+  }
+
+  void showError(String message) {
+    showDialog(
+        context: context, builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("error"),
+        content: Text(message),
+        actions: [
+          TextButton(onPressed: () {
+            Navigator.pop(context);
+          }, child: Text("Ok"))
+        ],
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Container(
         padding:
-            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+        EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
         child: Column(
           children: [
             SizedBox(
@@ -81,6 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       keyBoardType: TextInputType.emailAddress,
                       validation: validateEmail,
                       controller: _emailController,
+                      onSaved: (value) => _email = value,
                     ),
                     SizedBox(
                       height: getProportionateScreenHeight(20),
@@ -91,6 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       isPasswordField: true,
                       validation: validatePass,
                       controller: _passController,
+                      onSaved: (value) => _password = value,
                     ),
                   ],
                 )),
@@ -98,10 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
             DefaultButton(
               text: "LOGIN",
               onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => HomePage()));
-                }
+                login();
               },
             ),
             Spacer(
@@ -135,4 +161,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+
 }

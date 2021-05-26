@@ -1,15 +1,56 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/constants.dart';
 import 'package:hospital_app/screens/components/Deal_List.dart';
 import 'package:hospital_app/screens/components/FeatBrands.dart';
 import 'package:hospital_app/screens/components/SliderTab.dart';
 import 'package:hospital_app/screens/components/TopCat.dart';
+import 'package:hospital_app/screens/sign_up_screen/SignUpOption.dart';
 import 'package:hospital_app/size_config.dart';
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
+  @override
+  _HomeTabState createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool isloggedin = false;
+
+  User user;
+
+  checkAuth() async {
+    _auth.authStateChanges().listen((user) {
+      if (user == null) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => SignUpOption()));
+      }
+    });
+  }
+
+  getuser() async{
+    User firebaseUser = _auth.currentUser;
+    print(firebaseUser);
+    if(firebaseUser != null){
+      setState(() {
+        this.user = firebaseUser;
+        this.isloggedin = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    this.checkAuth();
+    this.getuser();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+
+    return !isloggedin ? CircularProgressIndicator() : SingleChildScrollView(
       child: Stack(
         children: [
           Column(
@@ -68,7 +109,7 @@ class HomeTab extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      "Hi, Sarang",
+                      "Hi, ${user.displayName}",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: getProportionateScreenWidth(24),
@@ -119,13 +160,13 @@ class HomeTab extends StatelessWidget {
                 margin: EdgeInsets.only(left: 20),
                 height: getProportionateScreenHeight(140),
                 child: ListView.builder(
-                  itemCount: 3,
+                    itemCount: 3,
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context,index){
+                    itemBuilder: (context, index) {
                       return SliderTab();
                     }),
               ),
-              
+
               SizedBox(
                 height: getProportionateScreenHeight(20),
               ),
@@ -162,7 +203,6 @@ class HomeTab extends StatelessWidget {
                     width: 10,
                   ),
                   Text("Search Medicine & Healthcare products"),
-
                 ],
               ),
             ),
