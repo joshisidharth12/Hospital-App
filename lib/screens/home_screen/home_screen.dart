@@ -33,36 +33,33 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: Bottomtabs(
+          selectedTab: _selectedTab,
+          tabPressed: (num) {
+            _tabPageController.animateToPage(num,
+                duration: kAnimationDuration, curve: Curves.easeOutCubic);
+          },
+        ),
         body: Column(
-      children: [
-        Expanded(
-          child: PageView(
-            controller: _tabPageController,
-            onPageChanged: (num) {
-              setState(() {
-                _selectedTab = num;
-              });
-            },
-            children: [
-              HomeTab(),
-              NotificationTab(),
-              //Center(child: Text("Cart"),),
-              CartTab(),
-              ProfileTab()
-            ],
-          ),
-        ),
-        Align(
-          child: Bottomtabs(
-            selectedTab: _selectedTab,
-            tabPressed: (num) {
-              _tabPageController.animateToPage(num,
-                  duration: kAnimationDuration, curve: Curves.easeOutCubic);
-            },
-          ),
-          alignment: Alignment.bottomCenter,
-        ),
-      ],
-    ));
+          children: [
+            Expanded(
+              child: PageView(
+                controller: _tabPageController,
+                onPageChanged: (num) {
+                  setState(() {
+                    _selectedTab = num;
+                  });
+                },
+                children: [
+                  HomeTab(),
+                  NotificationTab(),
+                  //Center(child: Text("Cart"),),
+                  CartTab(),
+                  ProfileTab()
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 }

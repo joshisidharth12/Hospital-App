@@ -15,7 +15,7 @@ class CartTab extends StatelessWidget {
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
               crossAxisCount: 2,
-              children: <Widget>[
+              children: [
                 CartItems(),
                 CartItems(),
                 CartItems(),
@@ -39,8 +39,8 @@ class CartItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: getProportionateScreenWidth(87.79),
-      height: getProportionateScreenHeight(93.46),
+      width: getProportionateScreenWidth(20),
+      height: getProportionateScreenHeight(20),
       decoration: BoxDecoration(
         color: Colors.white,
           border: Border.all(color: Colors.black,width: 3),

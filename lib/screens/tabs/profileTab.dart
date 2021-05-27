@@ -20,8 +20,8 @@ class _ProfileTabState extends State<ProfileTab> {
   checkAuth() async {
     _auth.authStateChanges().listen((user) {
       if (user == null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignUpOption()));
+        Navigator.pushReplacementNamed(
+            context, 'SignUpOpt');
       }
     });
   }
@@ -54,6 +54,7 @@ class _ProfileTabState extends State<ProfileTab> {
           Text("Hi your email is"),
           ElevatedButton(
             onPressed: (){
+              _auth.signOut();
             },
             child: Text("Sign out"),
           ),

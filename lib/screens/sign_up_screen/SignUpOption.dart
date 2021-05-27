@@ -6,8 +6,6 @@ import 'package:hospital_app/screens/create_account/CreateAcc.dart';
 import 'package:hospital_app/screens/home_screen/home_screen.dart';
 import 'package:hospital_app/screens/login/login_screen.dart';
 import 'package:hospital_app/size_config.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpOption extends StatefulWidget {
   //static String routeName = "/signup";
@@ -17,7 +15,6 @@ class SignUpOption extends StatefulWidget {
 }
 
 class _SignUpOptionState extends State<SignUpOption> {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isloggedin = false;
 
@@ -63,7 +60,7 @@ class _SignUpOptionState extends State<SignUpOption> {
           // ),
           Spacer(),
           Text(
-            "Welcome to company name",
+            "Welcome to Hospital Helper",
             style: TextStyle(
                 color: kPrimaryColor,
                 fontSize: getProportionateScreenWidth(24),
@@ -84,16 +81,14 @@ class _SignUpOptionState extends State<SignUpOption> {
           DefaultButton(
             text: "SIGN UP WITH EMAIL",
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CreateAccount()));
+              Navigator.pushReplacementNamed(context, 'SignUp');
             },
           ),
           Spacer(),
           DefaultButton(
             text: "LOGIN",
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()));
+              Navigator.pushReplacementNamed(context,'Login');
             },
           ),
           Spacer(

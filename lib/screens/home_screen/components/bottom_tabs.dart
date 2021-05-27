@@ -46,26 +46,8 @@ class _BottomtabsState extends State<Bottomtabs> {
                   widget.tabPressed(1);
                 },
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context, PageTransition(
-                    child: ShopLocation(), type: PageTransitionType.fade, duration: Duration(milliseconds: 500)));
-              },
-              child: Container(
-                width: getProportionateScreenWidth(50),
-                height: getProportionateScreenHeight(50),
-                decoration: BoxDecoration(
-                    color: Color(0xFF4157FF),
-                    borderRadius: BorderRadius.circular(5)),
-                child: Icon(
-                  Icons.add_box_outlined,
-                  color: Colors.white,
-                  size: 30,
-                ),
-              ),
-            ),
             BottomTabBtn(
-              iconPath: Icons.shopping_bag_outlined,
+              iconPath: Icons.medical_services,
               selected: _selectedTabs == 2 ? true : false,
                 onPressed: () {
                   widget.tabPressed(2);

@@ -29,8 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
   checkAuth() async {
     _auth.authStateChanges().listen((user) {
       if (user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => HomePage()));
+        Navigator.pushReplacementNamed(
+            context, 'SignUpOpt');
       }
     });
   }
@@ -135,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                Navigator.popAndPushNamed(context,'SignUp');
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

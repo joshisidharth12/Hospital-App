@@ -4,10 +4,8 @@ import 'package:hospital_app/CustomInput.dart';
 import 'package:hospital_app/Validators.dart';
 import 'package:hospital_app/constants.dart';
 import 'package:hospital_app/defaultButton.dart';
-import 'package:hospital_app/screens/home_screen/home_screen.dart';
-import 'package:hospital_app/screens/sign_up_screen/SignUpOption.dart';
+import 'package:hospital_app/services/database.dart';
 import 'package:hospital_app/size_config.dart';
-import 'package:page_transition/page_transition.dart';
 
 class CreateAccount extends StatefulWidget {
   @override
@@ -18,30 +16,30 @@ class _CreateAccountState extends State<CreateAccount> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  TextEditingController _namecontroller;
+  TextEditingController _nameController;
 
-  TextEditingController _emailcontroller;
+  TextEditingController _emailController;
 
-  TextEditingController _passcontroller;
+  TextEditingController _passController;
 
-  String _name, _password, _email;
+  String _name, _password, _email,_age,_emergencyNo;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   checkAuth() async {
     _auth.authStateChanges().listen((user) {
       if (user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+        Navigator.pushReplacementNamed(
+            context, '/');
       }
     });
   }
 
   @override
   void initState() {
-    _namecontroller = TextEditingController();
-    _emailcontroller = TextEditingController();
-    _passcontroller = TextEditingController();
+    _nameController = TextEditingController();
+    _emailController = TextEditingController();
+    _passController = TextEditingController();
 
     this.checkAuth();
     super.initState();
@@ -53,12 +51,10 @@ class _CreateAccountState extends State<CreateAccount> {
       try {
         UserCredential user = await _auth.createUserWithEmailAndPassword(
             email: _email, password: _password);
+        User firebaseUser = user.user;
+
+        await DatabaseService(uid: firebaseUser.uid).updateUserData(_name,_emergencyNo,_age);
         if(user != null){
-
-          /*UserUpdateInfo updateuser = UserUpdateInfo();
-          updateuser.displayName = _name;
-          user.updateProfile(updateuser);*/
-
           await _auth.currentUser.updateProfile(displayName: _name);
         }
       } catch (e) {
@@ -92,84 +88,96 @@ class _CreateAccountState extends State<CreateAccount> {
       body: Container(
         padding:
         EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-        child: Column(
-          children: [
-            Spacer(
-              flex: 1,
-            ),
-            Row(
-              children: [
-                Text(
-                  "Create your account",
-                  style: TextStyle(
-                      color: kPrimaryColor,
-                      fontSize: getProportionateScreenHeight(32),
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            Spacer(),
-            Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    CustomInput(
-                      hintText: "Name",
-                      iconImage: "assets/images/profile.png",
-                      validation: validateName,
-                      onSaved: (value) => _name = value,
-                    ),
-                    SizedBox(height: getProportionateScreenHeight(20),),
-                    CustomInput(
-                      hintText: "Email",
-                      iconImage: "assets/images/profile.png",
-                      keyBoardType: TextInputType.emailAddress,
-                      validation: validateEmail,
-                      onSaved: (value) => _email = value,
-                    ),
-                    SizedBox(height: getProportionateScreenHeight(20),),
-                    CustomInput(
-                      hintText: "Password",
-                      iconImage: "assets/images/lock.png",
-                      isPasswordField: true,
-                      validation: validatePass,
-                      onSaved: (value) => _password = value,
-                    ),
-                  ],
-                )
-            ),
-            Spacer(),
-            DefaultButton(
-              text: "CREATE ACCOUNT",
-              onPressed: () {
-                signup();
-              },
-            ),
-            Spacer(
-              flex: 5,
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
                 children: [
-                  Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.grey[500],
-                  ),
                   Text(
-                    "Already have account?  Login",
+                    "Create your account",
                     style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: getProportionateScreenHeight(14)),
-                  )
+                        color: kPrimaryColor,
+                        fontSize: getProportionateScreenHeight(32),
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
-            ),
-            Spacer()
-          ],
+              SizedBox(height: getProportionateScreenHeight(10),),
+              Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      CustomInput(
+                        hintText: "Name",
+                        iconImage: "assets/images/profile.png",
+                        validation: validateName,
+                        onSaved: (value) => _name = value,
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(20),),
+                      CustomInput(
+                        hintText: "Email",
+                        iconImage: "assets/images/profile.png",
+                        keyBoardType: TextInputType.emailAddress,
+                        validation: validateEmail,
+                        onSaved: (value) => _email = value,
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(20),),
+                      CustomInput(
+                        hintText: "Age",
+                        iconImage: "assets/images/profile.png",
+                        keyBoardType: TextInputType.number,
+                        validation: validateAge,
+                        onSaved: (value) => _age = value,
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(20),),
+                      CustomInput(
+                        hintText: "Emergency Number",
+                        iconImage: "assets/images/profile.png",
+                        keyBoardType: TextInputType.phone,
+                        validation: validatePhone,
+                        onSaved: (value) => _emergencyNo = value,
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(20),),
+                      CustomInput(
+                        hintText: "Password",
+                        iconImage: "assets/images/lock.png",
+                        isPasswordField: true,
+                        validation: validatePass,
+                        onSaved: (value) => _password = value,
+                      ),
+                    ],
+                  )
+              ),
+              SizedBox(height: getProportionateScreenHeight(10),),
+              DefaultButton(
+                text: "CREATE ACCOUNT",
+                onPressed: () {
+                  signup();
+                },
+              ),
+              SizedBox(height: getProportionateScreenHeight(10),),
+              GestureDetector(
+                onTap: () {
+                  Navigator.popAndPushNamed(context,'Login');
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.grey[500],
+                    ),
+                    Text(
+                      "Already have account?  Login",
+                      style: TextStyle(
+                          color: Colors.grey[500],
+                          fontSize: getProportionateScreenHeight(14)),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
