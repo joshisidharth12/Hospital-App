@@ -5,11 +5,8 @@ import 'package:hospital_app/Validators.dart';
 
 import 'package:hospital_app/constants.dart';
 import 'package:hospital_app/defaultButton.dart';
-import 'package:hospital_app/screens/home_screen/home_screen.dart';
-import 'package:hospital_app/screens/sign_up_screen/SignUpOption.dart';
 
 import 'package:hospital_app/size_config.dart';
-import 'package:page_transition/page_transition.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

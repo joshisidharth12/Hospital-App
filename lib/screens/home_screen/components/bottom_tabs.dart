@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:hospital_app/screens/map_view/shop_location.dart';
 import 'package:hospital_app/size_config.dart';
-import 'package:page_transition/page_transition.dart';
+
 
 class Bottomtabs extends StatefulWidget {
   final int selectedTab;

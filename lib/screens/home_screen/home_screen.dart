@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/constants.dart';
 import 'package:hospital_app/screens/home_screen/components/bottom_tabs.dart';
-import 'package:hospital_app/screens/sign_up_screen/SignUpOption.dart';
 import 'package:hospital_app/screens/tabs/cart_tab.dart';
 import 'package:hospital_app/screens/tabs/home_tab.dart';
 import 'package:hospital_app/screens/tabs/notifi_tab.dart';

@@ -2,10 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/constants.dart';
 import 'package:hospital_app/screens/components/Deal_List.dart';
-import 'package:hospital_app/screens/components/FeatBrands.dart';
-import 'package:hospital_app/screens/components/SliderTab.dart';
 import 'package:hospital_app/screens/components/TopCat.dart';
-import 'package:hospital_app/screens/sign_up_screen/SignUpOption.dart';
 import 'package:hospital_app/size_config.dart';
 
 class HomeTab extends StatefulWidget {

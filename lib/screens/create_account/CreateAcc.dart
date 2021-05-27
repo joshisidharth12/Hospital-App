@@ -16,12 +16,6 @@ class _CreateAccountState extends State<CreateAccount> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  TextEditingController _nameController;
-
-  TextEditingController _emailController;
-
-  TextEditingController _passController;
-
   String _name, _password, _email,_age,_emergencyNo;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -37,10 +31,6 @@ class _CreateAccountState extends State<CreateAccount> {
 
   @override
   void initState() {
-    _nameController = TextEditingController();
-    _emailController = TextEditingController();
-    _passController = TextEditingController();
-
     this.checkAuth();
     super.initState();
   }

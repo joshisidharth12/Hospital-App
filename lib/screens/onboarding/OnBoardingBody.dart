@@ -5,7 +5,6 @@ import 'package:hospital_app/screens/onboarding/OnBoardingScreen.dart';
 import 'package:hospital_app/screens/sign_up_screen/SignUpOption.dart';
 import 'package:hospital_app/size_config.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingBody extends StatefulWidget {
 
