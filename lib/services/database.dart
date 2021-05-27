@@ -19,6 +19,9 @@ class DatabaseService {
       'emergencyNo' : emergencyNo,
       'age': age,
     });
+  }
 
+  Stream<QuerySnapshot> get hosp{
+    return hospCollection.snapshots();
   }
 }

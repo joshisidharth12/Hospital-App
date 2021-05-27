@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/constants.dart';
@@ -15,6 +16,20 @@ class OnBoardingBody extends StatefulWidget {
 class _OnBoardingBodyState extends State<OnBoardingBody> {
   int currentpage = 0;
   PageController pageController;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  checkAuth() async {
+    _auth.authStateChanges().listen((user) {
+      if (user == null) {
+        Navigator.pushReplacementNamed(
+            context, 'SignUpOpt');
+      }
+      else if( user !=null){
+        Navigator.pushReplacementNamed(
+            context, 'HomeScreen');
+      }
+    });
+  }
 
   List<Map<String, String>> onBoardingPages = [
     {

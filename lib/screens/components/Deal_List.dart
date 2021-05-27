@@ -1,14 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/constants.dart';
 import 'package:hospital_app/size_config.dart';
+import 'package:provider/provider.dart';
 
-class DealOfTheDay extends StatelessWidget {
+/*class DealOfTheDay extends StatefulWidget {
   const DealOfTheDay({
     Key key,
   }) : super(key: key);
 
   @override
+  _DealOfTheDayState createState() => _DealOfTheDayState();
+}*/
+
+class DealOfTheDay extends StatelessWidget {
+  @override
   Widget build(BuildContext context) {
+
+    final hospital = Provider.of<QuerySnapshot>(context);
+    for(var doc in hospital.docs){
+      print(doc.data());
+    }
+
     return Container(
       padding:
           EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),

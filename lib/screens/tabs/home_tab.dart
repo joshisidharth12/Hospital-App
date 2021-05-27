@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/constants.dart';
 import 'package:hospital_app/screens/components/Deal_List.dart';
-import 'package:hospital_app/screens/components/TopCat.dart';
+import 'package:hospital_app/services/database.dart';
 import 'package:hospital_app/size_config.dart';
+import 'package:provider/provider.dart';
 
 class HomeTab extends StatefulWidget {
   @override
@@ -19,8 +21,7 @@ class _HomeTabState extends State<HomeTab> {
   checkAuth() async {
     _auth.authStateChanges().listen((user) {
       if (user == null) {
-        Navigator.pushReplacementNamed(
-            context,"SignUpOpt");
+        Navigator.pushReplacementNamed(context, "SignUpOpt");
       }
     });
   }
@@ -48,128 +49,125 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     return !isloggedin
         ? CircularProgressIndicator()
-        : SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  padding: EdgeInsets.symmetric(
-                      vertical: getProportionateScreenHeight(10),
-                      horizontal: getProportionateScreenWidth(20)),
-                  height: getProportionateScreenHeight(245),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(12),
-                          bottomLeft: Radius.circular(12)),
-                      gradient: kPrimaryGradientColor),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ConstrainedBox(
-                            constraints: BoxConstraints.tightFor(
-                                height: getProportionateScreenHeight(60),
-                                width: getProportionateScreenHeight(60)),
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.redAccent,
-                                  padding: EdgeInsets.all(5),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(100))),
-                              child: Icon(
-                                Icons.notifications_none,
-                                size: 25,
-                                color: Colors.white,
+        : StreamProvider<QuerySnapshot>.value(
+            value: DatabaseService().hosp,
+            initialData: null,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    padding: EdgeInsets.all(
+                      getProportionateScreenHeight(20),
+                    ),
+                    height: getProportionateScreenHeight(245),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(12),
+                            bottomLeft: Radius.circular(12)),
+                        gradient: kPrimaryGradientColor),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ConstrainedBox(
+                              constraints: BoxConstraints.tightFor(
+                                  height: getProportionateScreenHeight(60),
+                                  width: getProportionateScreenHeight(60)),
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFFFF6161),
+                                    padding: EdgeInsets.all(5),
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100))),
+                                child: Icon(
+                                  Icons.notifications_none,
+                                  size: 27,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: getProportionateScreenWidth(20),
-                          ),
-                          ConstrainedBox(
-                            constraints: BoxConstraints.tightFor(
-                                height: getProportionateScreenHeight(60),
-                                width: getProportionateScreenHeight(60)),
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
-                                  padding: EdgeInsets.all(5),
-                                  onPrimary: Color(0xFF2F80ED),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(100))),
-                              child: Icon(
-                                Icons.qr_code_scanner,
-                                size: 25,
-                                color: Color(0xFF2F80ED),
-                              ),
+                            SizedBox(
+                              width: getProportionateScreenWidth(20),
                             ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Hi, ${user.displayName}",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: getProportionateScreenWidth(24),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Welcome to Hospital Helper",
-                        style: TextStyle(
-                          fontSize: getProportionateScreenWidth(16),
-                          fontWeight: FontWeight.w300,
-                          color: Colors.white,
+                            ConstrainedBox(
+                              constraints: BoxConstraints.tightFor(
+                                  height: getProportionateScreenHeight(60),
+                                  width: getProportionateScreenHeight(60)),
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.white,
+                                    padding: EdgeInsets.all(5),
+                                    onPrimary: Color(0xFF2F80ED),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100))),
+                                child: Icon(
+                                  Icons.qr_code_scanner,
+                                  size: 27,
+                                  color: Color(0xFF2F80ED),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on,
-                            color: Colors.red,
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Hi, ${user.displayName}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: getProportionateScreenWidth(24),
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Welcome to Hospital Helper",
+                          style: TextStyle(
+                            fontSize: getProportionateScreenWidth(16),
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white,
                           ),
-                          Text("Pune, Maharashtra",
-                              style: TextStyle(
-                                fontSize: getProportionateScreenWidth(16),
-                                fontWeight: FontWeight.w300,
-                                color: Colors.white,
-                              )),
-                        ],
-                      )
-                    ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              color: Colors.red,
+                            ),
+                            Text("Pune, Maharashtra",
+                                style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(16),
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.white,
+                                )),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-
-                SizedBox(
-                  height: getProportionateScreenHeight(30),
-                ),
-                TopCat(),
-                SizedBox(
-                  height: getProportionateScreenHeight(20),
-                ),
-                SizedBox(
-                  height: getProportionateScreenHeight(20),
-                ),
-                DealOfTheDay(),
-                SizedBox(
-                  height: getProportionateScreenHeight(30),
-                ),
-              ],
+                  SizedBox(
+                    height: getProportionateScreenHeight(30),
+                  ),
+                  DealOfTheDay(),
+                  SizedBox(
+                    height: getProportionateScreenHeight(30),
+                  ),
+                ],
+              ),
             ),
           );
   }
