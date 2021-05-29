@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:hospital_app/constants.dart';
 import 'package:hospital_app/defaultButton.dart';
+import 'package:hospital_app/screens/QRCodeScanner/pdfViewerpage.dart';
+import 'package:hospital_app/services/database.dart';
 import 'package:hospital_app/size_config.dart';
 class QRScanScreen extends StatefulWidget {
   @override
@@ -37,34 +41,17 @@ class _QRScanScreenState extends State<QRScanScreen> {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Scan Result',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: kTextColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 8),
-              Text(
-                '$pdfLink',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: kTextColor,
-                ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(72)),
+            children: [
               DefaultButton(
                 text: 'Scan',
                 onPressed: () => scanQRCode(),
               ),
               SizedBox(height: getProportionateScreenHeight(20)),
-              pdfLink == "" ? SizedBox():DefaultButton(
+              pdfLink == "" ? SizedBox(height: 1,):DefaultButton(
                 text: "View PDF",
-                onPressed: (){
-                  print("View PDF");
+                onPressed: () async {
+                  final file = await DatabaseService.loadNetwork(pdfLink);
+                  openPdf(context,file);
                 },
               )
 
@@ -91,4 +78,9 @@ class _QRScanScreenState extends State<QRScanScreen> {
       pdfLink = 'Failed to get platform version.';
     }
   }
+
+  void openPdf(BuildContext context,File file) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => PDFViewerPage(file: file,)));
+  }
 }
+

@@ -262,7 +262,7 @@ class _HomeTabState extends State<HomeTab> {
 
                           return Scaffold(
                             body: Center(
-                              child: CircularProgressIndicator(),
+                              child: Text("Loading"),
                             ),
                           );
                         },

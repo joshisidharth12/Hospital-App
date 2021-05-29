@@ -39,6 +39,7 @@ dependencies:
   path_provider: ^1.6.27
   path: ^1.8.0
   provider: ^5.0.0
+  flutter_pdfview: ^1.0.4
   flutter_barcode_scanner: ^2.0.0
 
 dev_dependencies:
