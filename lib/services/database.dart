@@ -21,7 +21,7 @@ class DatabaseService {
     });
   }
 
-  Stream<QuerySnapshot> get hosp{
+  /*Stream<QuerySnapshot> get hosp{
     return hospCollection.snapshots();
-  }
+  }*/
 }
