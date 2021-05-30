@@ -47,7 +47,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
                 onPressed: () => scanQRCode(),
               ),
               SizedBox(height: getProportionateScreenHeight(20)),
-              pdfLink == "" ? SizedBox(height: 1,):DefaultButton(
+              pdfLink == ""|| pdfLink == "-1" ? SizedBox(height: 1,):DefaultButton(
                 text: "View PDF",
                 onPressed: () async {
                   final file = await DatabaseService.loadNetwork(pdfLink);

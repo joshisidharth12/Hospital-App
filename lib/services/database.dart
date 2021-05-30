@@ -25,6 +25,13 @@ class DatabaseService {
     });
   }
 
+  Future updatePdf(String url) async{
+    return await userCollection.doc(uid).set({
+      'pdf' : url
+    });
+  }
+
+
   static Future<File> loadNetwork(String url) async{
     final response = await http.get(url);
     final bytes = response.bodyBytes;

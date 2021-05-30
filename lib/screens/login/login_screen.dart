@@ -34,9 +34,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    this.checkAuth();
     super.initState();
+    this.checkAuth();
+
   }
 
   login() async {
