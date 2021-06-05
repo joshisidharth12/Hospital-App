@@ -1,5 +1,12 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hospital_app/size_config.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -14,6 +21,64 @@ class ProductDetails extends StatefulWidget {
 class _ProductDetailsState extends State<ProductDetails> {
   final CollectionReference _hospitals =
       FirebaseFirestore.instance.collection('Hospital');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final mainReference =
+      FirebaseDatabase.instance.reference().child('Appointments');
+
+  String _pdf, _age, _name;
+
+  checkAuth() async {
+    _auth.authStateChanges().listen((user) {
+      if (user == null) {
+        Navigator.pushReplacementNamed(context, "SignUpOpt");
+      } else {
+        _getUserName();
+      }
+    });
+  }
+
+  Future<void> _getUserName() async {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc((_auth.currentUser.uid))
+        .get()
+        .then((value) {
+      setState(() {
+        _pdf = value.data()['pdf'];
+        _name = value.data()['name'];
+        _age = value.data()['age'].toString();
+      });
+    });
+  }
+
+  String createCryptoRandomString([int length = 32]) {
+    final Random _random = Random.secure();
+    var values = List<int>.generate(length, (i) => _random.nextInt(256));
+    return base64Url.encode(values);
+  }
+
+  void documentFileUpload(
+      String name, String url, String age, String type, String status) {
+    var data = {
+      "PDF": url,
+      "NAME": name,
+      "AGE": age,
+      "TYPE": type,
+      "STATUS": status
+    };
+
+    mainReference.child(createCryptoRandomString()).set(data).then((value) {
+      print("Appointment Booked");
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkAuth();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +91,41 @@ class _ProductDetailsState extends State<ProductDetails> {
               fontWeight: FontWeight.w600,
               fontFamily: 'Arial Bold'),
         )),
+        bottomNavigationBar: Container(
+          height: getProportionateScreenHeight(100),
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(20), topLeft: Radius.circular(20)),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  spreadRadius: 4,
+                )
+              ]),
+          child: AppointmentButton(
+            onPressed: () {
+              if (_pdf == null || _pdf == "-1") {
+                Fluttertoast.showToast(
+                    msg: "PDF does not exist",
+                    toastLength: Toast.LENGTH_SHORT,
+                    fontSize: 16,
+                    textColor: Colors.red,
+                    gravity: ToastGravity.BOTTOM);
+              } else {
+                documentFileUpload(_name, _pdf, _age, "PATIENT", "PENDING");
+                Fluttertoast.showToast(
+                    msg: "Appointment has been booked",
+                    toastLength: Toast.LENGTH_SHORT,
+                    textColor: Colors.green,
+                    gravity: ToastGravity.BOTTOM);
+              }
+            },
+          ),
+        ),
         body: FutureBuilder(
           future: _hospitals.doc(widget.id).get(),
           builder: (context, snapshot) {
@@ -59,7 +159,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(left: 20,top: 20),
+                              padding: EdgeInsets.only(left: 20, top: 20),
                               child: Text(
                                 "Location",
                                 style: TextStyle(
@@ -68,7 +168,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     color: Colors.black),
                               ),
                             ),
-                            SizedBox(height: getProportionateScreenHeight(10),),
+                            SizedBox(
+                              height: getProportionateScreenHeight(10),
+                            ),
                             Padding(
                               padding: EdgeInsets.only(left: 20),
                               child: Text("${documentData['location']}",
@@ -82,7 +184,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ),
                             Container(
                                 height: getProportionateScreenHeight(40),
-                                margin: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal:
+                                        getProportionateScreenWidth(20)),
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
@@ -133,7 +237,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                               height: getProportionateScreenHeight(20),
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal:getProportionateScreenWidth(20)),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: getProportionateScreenWidth(20)),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -142,7 +247,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
                                           color: Colors.black)),
-                                  SizedBox(height: getProportionateScreenHeight(10),),
+                                  SizedBox(
+                                    height: getProportionateScreenHeight(10),
+                                  ),
                                   Text("${documentData['info']}",
                                       textAlign: TextAlign.justify,
                                       style: TextStyle(
@@ -170,6 +277,51 @@ class _ProductDetailsState extends State<ProductDetails> {
             );
           },
         ));
+  }
+}
+
+class AppointmentButton extends StatelessWidget {
+  const AppointmentButton({
+    Key key,
+    this.onPressed,
+  }) : super(key: key);
+
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: BoxConstraints.tightFor(
+        width: double.infinity,
+        height: getProportionateScreenHeight(50),
+      ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+            primary: Colors.green,
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(20)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(13),
+            ),
+            textStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 19,
+                fontFamily: 'Overpass Bold',
+                fontWeight: FontWeight.bold)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Appointment"),
+            Icon(
+              Icons.arrow_forward_rounded,
+              color: Colors.white,
+              size: 30,
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 

@@ -50,7 +50,6 @@ class _HomePageState extends State<HomePage> {
                 },
                 children: [
                   HomeTab(),
-                  NotificationTab(),
                   //Center(child: Text("Cart"),),
                   CartTab(),
                   ProfileTab()

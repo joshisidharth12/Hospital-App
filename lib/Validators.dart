@@ -24,17 +24,17 @@ String validateName(String value) {
 
 String validateAge(String value) {
   if(value == ""){
-    return 'Name Field is Empty';
+    return 'Age Field is Empty';
   }
   else if (value.length < 2)
-    return 'Name must be more than 2 charater';
+    return 'Age must be more than 2 charater';
   else
     return null;
 }
 
 String validatePhone(String value) {
   if(value == ""){
-    return 'Password Field is Empty';
+    return 'Phone Field is Empty';
   }
   else
     return null;

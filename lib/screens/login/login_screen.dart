@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _auth.authStateChanges().listen((user) {
       if (user != null) {
         Navigator.pushReplacementNamed(
-            context, 'SignUpOpt');
+            context, 'HomeScreen');
       }
     });
   }

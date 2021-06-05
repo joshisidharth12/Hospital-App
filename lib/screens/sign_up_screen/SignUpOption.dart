@@ -21,8 +21,8 @@ class _SignUpOptionState extends State<SignUpOption> {
   checkAuth() async {
     _auth.authStateChanges().listen((user) {
       if (user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+        Navigator.pushReplacementNamed(
+            context, 'HomeScreen');
       }
     });
   }

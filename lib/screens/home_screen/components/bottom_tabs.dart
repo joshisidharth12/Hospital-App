@@ -38,24 +38,17 @@ class _BottomtabsState extends State<Bottomtabs> {
               },
             ),
             BottomTabBtn(
-              iconPath: Icons.notifications_none,
+              iconPath: Icons.medical_services,
               selected: _selectedTabs == 1 ? true : false,
                 onPressed: () {
                   widget.tabPressed(1);
                 },
             ),
             BottomTabBtn(
-              iconPath: Icons.medical_services,
-              selected: _selectedTabs == 2 ? true : false,
-                onPressed: () {
-                  widget.tabPressed(2);
-                },
-            ),
-            BottomTabBtn(
               iconPath: Icons.perm_identity_rounded,
-              selected: _selectedTabs == 3 ? true : false,
+              selected: _selectedTabs == 2 ? true : false,
               onPressed: () {
-                widget.tabPressed(3);
+                widget.tabPressed(2);
               },
             ),
           ],

@@ -24,7 +24,7 @@ class _CreateAccountState extends State<CreateAccount> {
     _auth.authStateChanges().listen((user) {
       if (user != null) {
         Navigator.pushReplacementNamed(
-            context, '/');
+            context, 'HomeScreen');
       }
     });
   }
@@ -43,7 +43,7 @@ class _CreateAccountState extends State<CreateAccount> {
             email: _email, password: _password);
         User firebaseUser = user.user;
 
-        await DatabaseService(uid: firebaseUser.uid).updateUserData(_name,_emergencyNo,_age);
+        await DatabaseService(uid: firebaseUser.uid).setUserData(_name,_emergencyNo,_age);
         if(user != null){
           await _auth.currentUser.updateProfile(displayName: _name);
         }

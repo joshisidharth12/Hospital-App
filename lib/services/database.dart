@@ -17,16 +17,17 @@ class DatabaseService {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('Users');
 
-  Future updateUserData(String name,String emergencyNo, String age,) async{
+  Future setUserData(String name,String emergencyNo, String age,) async{
     return await userCollection.doc(uid).set({
       'name' : name,
       'emergencyNo' : emergencyNo,
       'age': age,
+      'pdf': "-1"
     });
   }
 
   Future updatePdf(String url) async{
-    return await userCollection.doc(uid).set({
+    return await userCollection.doc(uid).update({
       'pdf' : url
     });
   }
