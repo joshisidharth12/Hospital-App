@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hospital_app/constants.dart';
-import 'package:hospital_app/screens/HospitalDetailsScreen/ProductDetails.dart';
+import 'package:hospital_app/screens/HospitalDetailsScreen/HospitalDetails.dart';
 import 'package:hospital_app/screens/QRCodeGenerator/QRCode.dart';
 import 'package:hospital_app/screens/QRCodeScanner/QRScannerScreen.dart';
 import 'package:hospital_app/services/database.dart';

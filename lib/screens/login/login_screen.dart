@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     CustomInput(
                       hintText: "Email",
-                      iconImage: "assets/images/profile.png",
+                      iconImage: "assets/images/email.png",
                       keyBoardType: TextInputType.emailAddress,
                       validation: validateEmail,
                       controller: _emailController,

@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hospital_app/services/database.dart';
 import 'package:hospital_app/size_config.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -23,10 +24,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       FirebaseFirestore.instance.collection('Hospital');
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final mainReference =
-      FirebaseDatabase.instance.reference().child('Appointments');
-
-  String _pdf, _age, _name,_aptid;
+  String _pdf, _age, _name, _aptid;
 
   checkAuth() async {
     _auth.authStateChanges().listen((user) {
@@ -49,28 +47,6 @@ class _ProductDetailsState extends State<ProductDetails> {
         _name = value.data()['name'];
         _age = value.data()['age'].toString();
       });
-    });
-  }
-
-  String createCryptoRandomString([int length = 32]) {
-    final Random _random = Random.secure();
-    var values = List<int>.generate(length, (i) => _random.nextInt(256));
-    return base64Url.encode(values);
-  }
-
-  void documentFileUpload(
-      String name, String url, String age, String type, String status,String apt) {
-    var data = {
-      "pdf": url,
-      "name": name,
-      "age": age,
-      "type": type,
-      "status": status,
-      "appointment_id": apt
-    };
-
-    mainReference.child(apt).set(data).then((value) {
-      print("Appointment Booked");
     });
   }
 
@@ -117,8 +93,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                     textColor: Colors.red,
                     gravity: ToastGravity.BOTTOM);
               } else {
-                _aptid = createCryptoRandomString();
-                documentFileUpload(_name, _pdf, _age, "PATIENT", "PENDING",_aptid);
+                _aptid = DatabaseService().createCryptoRandomString();
+                DatabaseService().documentFileUpload(
+                    _name, _pdf, _age, "PATIENT", "PENDING", _aptid);
                 Fluttertoast.showToast(
                     msg: "Appointment has been booked",
                     toastLength: Toast.LENGTH_SHORT,
@@ -272,9 +249,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
             return Container(
               child: Center(
-                child: Column(
-                  children: [CircularProgressIndicator(), Text('Loading....')],
-                ),
+                child: CircularProgressIndicator(),
               ),
             );
           },

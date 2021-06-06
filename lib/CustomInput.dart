@@ -13,7 +13,7 @@ class CustomInput extends StatelessWidget {
     this.textInputAction,
     this.iconImage,
     this.keyBoardType,
-    this.controller, this.validation, this.onSaved,
+    this.controller, this.validation, this.onSaved, this.count,
   }) : super(key: key);
 
   final String hintText;
@@ -23,6 +23,7 @@ class CustomInput extends StatelessWidget {
   final Function validation,onSaved;
   final bool isPasswordField;
   final String iconImage;
+  final int count;
   final TextInputType keyBoardType;
   final TextEditingController controller;
   final TextInputAction textInputAction;
@@ -40,6 +41,7 @@ class CustomInput extends StatelessWidget {
       keyboardType: keyBoardType,
       validator: validation,
       onSaved: onSaved,
+      maxLength: count,
       textAlign: TextAlign.start,
       style: TextStyle(
           color: kPrimaryColor,
@@ -48,6 +50,7 @@ class CustomInput extends StatelessWidget {
       decoration: InputDecoration(
         fillColor: kSecondaryColor.withOpacity(0.22),
         filled: true,
+        counterText: "",
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.0),
           borderSide: BorderSide.none

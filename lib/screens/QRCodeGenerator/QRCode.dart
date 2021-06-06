@@ -13,7 +13,7 @@ class QRCodeGenerator extends StatefulWidget {
 class _QRCodeGeneratorState extends State<QRCodeGenerator> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  String _info,_age,_name;
+  String _info,_age,_name,_emergencyNo;
 
   checkAuth() async {
     _auth.authStateChanges().listen((user) {
@@ -35,6 +35,7 @@ class _QRCodeGeneratorState extends State<QRCodeGenerator> {
         _info = value.data()['pdf'];
         _name = value.data()['name'];
         _age = value.data()['age'].toString();
+        _emergencyNo = value.data()['emergencyNo'].toString();
       });
     });
   }
@@ -56,6 +57,8 @@ class _QRCodeGeneratorState extends State<QRCodeGenerator> {
           children: [
             CircleAvatar(
               radius: getProportionateScreenWidth(60),
+              backgroundColor: Colors.transparent,
+              backgroundImage: AssetImage("assets/images/defaultProfile.png"),
             ),
             SizedBox(
               height: getProportionateScreenHeight(20),
@@ -89,11 +92,23 @@ class _QRCodeGeneratorState extends State<QRCodeGenerator> {
                   color: Colors.black,
                   fontWeight: FontWeight.w700
               ),
-            ),SizedBox(
+            ),
+            SizedBox(
               height: getProportionateScreenHeight(20),
             ),
             Text(
               "Name : $_name" ,
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700
+              ),
+            ),
+            SizedBox(
+              height: getProportionateScreenHeight(20),
+            ),
+            Text(
+              "Emergency Number : $_emergencyNo" ,
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,

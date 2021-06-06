@@ -106,7 +106,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       SizedBox(height: getProportionateScreenHeight(20),),
                       CustomInput(
                         hintText: "Email",
-                        iconImage: "assets/images/profile.png",
+                        iconImage: "assets/images/email.png",
                         keyBoardType: TextInputType.emailAddress,
                         validation: validateEmail,
                         onSaved: (value) => _email = value,
@@ -114,7 +114,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       SizedBox(height: getProportionateScreenHeight(20),),
                       CustomInput(
                         hintText: "Age",
-                        iconImage: "assets/images/profile.png",
+                        iconImage: "assets/images/ageIcon.png",
                         keyBoardType: TextInputType.number,
                         validation: validateAge,
                         onSaved: (value) => _age = value,
@@ -122,7 +122,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       SizedBox(height: getProportionateScreenHeight(20),),
                       CustomInput(
                         hintText: "Emergency Number",
-                        iconImage: "assets/images/profile.png",
+                        iconImage: "assets/images/smartphone.png",
                         keyBoardType: TextInputType.phone,
                         validation: validatePhone,
                         onSaved: (value) => _emergencyNo = value,

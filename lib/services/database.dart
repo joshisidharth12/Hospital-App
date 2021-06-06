@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,6 +19,47 @@ class DatabaseService {
 
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('Users');
+
+  final mainReference =
+  FirebaseDatabase.instance.reference().child('Appointments');
+
+  String createCryptoRandomString([int length = 32]) {
+    final Random _random = Random.secure();
+    var values = List<int>.generate(length, (i) => _random.nextInt(256));
+    return base64Url.encode(values);
+  }
+
+  void documentFileUpload(
+      String name, String url, String age, String type, String status,String apt) {
+    var data = {
+      "pdf": url,
+      "name": name,
+      "age": age,
+      "type": type,
+      "status": status,
+      "appointment_id": apt
+    };
+
+    mainReference.child(apt).set(data).then((value) {
+      print("Appointment Booked");
+    });
+  }
+
+  void documentVictimFileUpload(
+      String name, String url,String emergNo, String age, String type, String status,String apt) {
+    var data = {
+      "pdf": url,
+      "name": name,
+      "age": age,
+      "type": type,
+      "status": status,
+      "appointment_id": apt
+    };
+
+    mainReference.child(apt).set(data).then((value) {
+      print("Appointment Booked");
+    });
+  }
 
   Future setUserData(String name,String emergencyNo, String age,) async{
     return await userCollection.doc(uid).set({
