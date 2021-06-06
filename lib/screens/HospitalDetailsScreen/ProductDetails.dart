@@ -26,7 +26,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   final mainReference =
       FirebaseDatabase.instance.reference().child('Appointments');
 
-  String _pdf, _age, _name;
+  String _pdf, _age, _name,_aptid;
 
   checkAuth() async {
     _auth.authStateChanges().listen((user) {
@@ -59,16 +59,17 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   void documentFileUpload(
-      String name, String url, String age, String type, String status) {
+      String name, String url, String age, String type, String status,String apt) {
     var data = {
-      "PDF": url,
-      "NAME": name,
-      "AGE": age,
-      "TYPE": type,
-      "STATUS": status
+      "pdf": url,
+      "name": name,
+      "age": age,
+      "type": type,
+      "status": status,
+      "appointment_id": apt
     };
 
-    mainReference.child(createCryptoRandomString()).set(data).then((value) {
+    mainReference.child(apt).set(data).then((value) {
       print("Appointment Booked");
     });
   }
@@ -116,7 +117,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                     textColor: Colors.red,
                     gravity: ToastGravity.BOTTOM);
               } else {
-                documentFileUpload(_name, _pdf, _age, "PATIENT", "PENDING");
+                _aptid = createCryptoRandomString();
+                documentFileUpload(_name, _pdf, _age, "PATIENT", "PENDING",_aptid);
                 Fluttertoast.showToast(
                     msg: "Appointment has been booked",
                     toastLength: Toast.LENGTH_SHORT,

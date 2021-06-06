@@ -62,7 +62,8 @@ class _HomeTabState extends State<HomeTab> {
     return !isloggedin
         ? CircularProgressIndicator()
         : Scaffold(
-      body: SingleChildScrollView(
+      body: Container(
+        width: double.infinity,
         child: Column(
           children: [
             Container(
@@ -197,22 +198,23 @@ class _HomeTabState extends State<HomeTab> {
             SizedBox(
               height: getProportionateScreenHeight(20),
             ),
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 20),
-                    child: Text(
-                      "Hospitals",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: getProportionateScreenHeight(24),
-                        fontWeight: FontWeight.w600,
-                      ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Text(
+                    "Hospitals",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: getProportionateScreenHeight(24),
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  FutureBuilder<QuerySnapshot>(
+                ),
+                Container(
+                  height: getProportionateScreenHeight(300),
+                  child: FutureBuilder<QuerySnapshot>(
                     future: _hospitals.get(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
@@ -305,13 +307,13 @@ class _HomeTabState extends State<HomeTab> {
 
                       return Scaffold(
                         body: Center(
-                          child: Text("Loading"),
+                          child: CircularProgressIndicator(),
                         ),
                       );
                     },
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
