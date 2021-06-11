@@ -1,11 +1,8 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hospital_app/services/database.dart';
 import 'package:hospital_app/size_config.dart';
@@ -94,8 +91,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                     gravity: ToastGravity.BOTTOM);
               } else {
                 _aptid = DatabaseService().createCryptoRandomString();
-                DatabaseService().documentFileUpload(
-                    _name, _pdf, _age, "PATIENT", "PENDING", _aptid);
+                DatabaseService()
+                    .documentFileUpload(_name, _pdf, _age, "PENDING", _aptid);
                 Fluttertoast.showToast(
                     msg: "Appointment has been booked",
                     toastLength: Toast.LENGTH_SHORT,
@@ -137,15 +134,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 20, top: 20),
-                              child: Text(
-                                "Location",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.black),
-                              ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(20),
+                            ),
+                            TitleWidget(
+                              title: "Location",
                             ),
                             SizedBox(
                               height: getProportionateScreenHeight(10),
@@ -193,13 +186,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                             SizedBox(
                               height: getProportionateScreenHeight(20),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text("Specialities : ",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.black)),
+                            TitleWidget(
+                              title: "Specialities : ",
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(20),
                             ),
                             Container(
                               height: getProportionateScreenHeight(70),
@@ -215,29 +206,74 @@ class _ProductDetailsState extends State<ProductDetails> {
                             SizedBox(
                               height: getProportionateScreenHeight(20),
                             ),
+                            TitleWidget(
+                              title: "Doctors",
+                            ),
+                            Container(
+                              height: (3 * 100).toDouble(),
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: MediaQuery.removePadding(
+                                context: context,
+                                removeTop: true,
+                                child: GridView(
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 2.0,
+                                          mainAxisSpacing: 10,
+                                          crossAxisSpacing: 10),
+                                  physics: NeverScrollableScrollPhysics(),
+                                  children: [
+                                    DocUnavailableTile(
+                                      name: "Dr Joshi",
+                                      speciality: "gendus",
+                                    ),
+                                    DocAvailableTile(
+                                      name: "Dr Joshi",
+                                      speciality: "gendus",
+                                    ),
+                                    DocUnavailableTile(
+                                      name: "Dr Joshi",
+                                      speciality: "gendus",
+                                    ),
+                                    DocAvailableTile(
+                                      name: "Dr Joshi",
+                                      speciality: "gendus",
+                                    ),
+                                    DocUnavailableTile(
+                                      name: "Dr Joshi",
+                                      speciality: "gendus",
+                                    ),
+                                    DocAvailableTile(
+                                      name: "Dr Joshi",
+                                      speciality: "gendus",
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(20),
+                            ),
+                            TitleWidget(
+                              title: "About the Hospital",
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(20),
+                            ),
                             Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: getProportionateScreenWidth(20)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("About the Hospital",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: Colors.black)),
-                                  SizedBox(
-                                    height: getProportionateScreenHeight(10),
-                                  ),
-                                  Text("${documentData['info']}",
-                                      textAlign: TextAlign.justify,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 18,
-                                          color: Colors.black)),
-                                ],
-                              ),
+                              child: Text("${documentData['info']}",
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 18,
+                                      color: Colors.black)),
                             ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(40),
+                            )
                           ],
                         ),
                       ),
@@ -247,13 +283,148 @@ class _ProductDetailsState extends State<ProductDetails> {
               );
             }
 
-            return Container(
-              child: Center(
+            return Scaffold(
+              body: Center(
                 child: CircularProgressIndicator(),
               ),
             );
           },
         ));
+  }
+}
+
+class TitleWidget extends StatelessWidget {
+  const TitleWidget({
+    Key key,
+    this.title,
+  }) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: 20),
+      child: Text(title,
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black)),
+    );
+  }
+}
+
+class DocAvailableTile extends StatelessWidget {
+  const DocAvailableTile({
+    Key key,
+    this.name,
+    this.speciality,
+  }) : super(key: key);
+
+  final String name, speciality;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          color: Colors.green.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.green.shade100, spreadRadius: 3, blurRadius: 6)
+          ]),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            "assets/images/doctor.svg",
+            width: getProportionateScreenWidth(40),
+            color: Colors.white,
+          ),
+          SizedBox(
+            width: getProportionateScreenWidth(10),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(5),
+              ),
+              Text(
+                speciality,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class DocUnavailableTile extends StatelessWidget {
+  const DocUnavailableTile({
+    Key key,
+    this.name,
+    this.speciality,
+  }) : super(key: key);
+
+  final String name, speciality;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          color: Colors.red.withOpacity(0.6),
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.red.shade100, spreadRadius: 3, blurRadius: 6)
+          ]),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            "assets/images/doctor.svg",
+            width: getProportionateScreenWidth(40),
+            color: Colors.white,
+          ),
+          SizedBox(
+            width: getProportionateScreenWidth(10),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(5),
+              ),
+              Text(
+                speciality,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
 

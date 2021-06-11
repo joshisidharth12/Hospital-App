@@ -30,12 +30,12 @@ class DatabaseService {
   }
 
   void documentFileUpload(
-      String name, String url, String age, String type, String status,String apt) {
+      String name, String url, String age, String status,String apt) {
     var data = {
       "pdf": url,
       "name": name,
       "age": age,
-      "type": type,
+      "type": "PATIENT",
       "status": status,
       "appointment_id": apt
     };
@@ -46,12 +46,12 @@ class DatabaseService {
   }
 
   void documentVictimFileUpload(
-      String name, String url,String emergNo, String age, String type, String status,String apt) {
+      String name, String url,String emergNo, String age, String status,String apt) {
     var data = {
       "pdf": url,
       "name": name,
       "age": age,
-      "type": type,
+      "type": "VICTIM",
       "status": status,
       "appointment_id": apt
     };

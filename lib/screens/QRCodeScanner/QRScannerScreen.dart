@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hospital_app/CustomInput.dart';
 import 'package:hospital_app/defaultButton.dart';
 import 'package:hospital_app/screens/QRCodeScanner/pdfViewerpage.dart';
@@ -28,7 +29,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
       _formKey.currentState.save();
       _aptid = DatabaseService().createCryptoRandomString();
       DatabaseService().documentVictimFileUpload(
-          _name, pdfLink, _emergencyNo, _age, "VICTIM", "PENDING", _aptid);
+          _name, pdfLink, _emergencyNo, _age, "PENDING", _aptid);
       Fluttertoast.showToast(
           msg: "Appointment has been booked",
           toastLength: Toast.LENGTH_SHORT,
@@ -43,10 +44,10 @@ class _QRScanScreenState extends State<QRScanScreen> {
           centerTitle: true,
           title: Text(
             "QR Code Scanner",
-            style: TextStyle(
+            style: GoogleFonts.overpass(
                 fontSize: getProportionateScreenHeight(18),
                 color: Colors.black,
-                fontFamily: 'Overpass Bold'),
+                fontWeight: FontWeight.bold),
           ),
           leading: Builder(
             builder: (BuildContext context) {
@@ -95,6 +96,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
                             CustomInput(
                               hintText: "Age",
                               iconImage: "assets/images/ageIcon.png",
+                              keyBoardType: TextInputType.number,
                               onSaved: (value) => _age = value,
                               count: 2,
                             ),
@@ -104,6 +106,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
                             CustomInput(
                               hintText: "Emergency Number",
                               iconImage: "assets/images/smartphone.png",
+                              keyBoardType: TextInputType.number,
                               onSaved: (value) => _emergencyNo = value,
                               count: 10,
                             ),
