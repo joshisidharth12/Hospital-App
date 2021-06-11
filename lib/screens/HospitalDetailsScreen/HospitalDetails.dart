@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hospital_app/model/hospitalModel.dart';
 import 'package:hospital_app/services/database.dart';
 import 'package:hospital_app/size_config.dart';
 
@@ -21,7 +23,10 @@ class _ProductDetailsState extends State<ProductDetails> {
       FirebaseFirestore.instance.collection('Hospital');
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  final docReference = FirebaseDatabase.instance.reference().child('Doctors');
+
   String _pdf, _age, _name, _aptid;
+  List<DoctorModel> doctors = List();
 
   checkAuth() async {
     _auth.authStateChanges().listen((user) {
@@ -47,11 +52,25 @@ class _ProductDetailsState extends State<ProductDetails> {
     });
   }
 
+  Future<void> getDoctor(){
+    docReference.once().then((DataSnapshot snap) {
+      doctors.clear();
+      print(snap.value);
+      var data = snap.value;
+      data.forEach((key, value) {
+        DoctorModel doc = new DoctorModel(
+            value['d_name'], value['department'], value['speciality'],value['status']);
+        doctors.add(doc);
+      });
+      print("DocList has ${doctors.length}");
+    });
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkAuth();
+    getDoctor();
   }
 
   @override
@@ -210,12 +229,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                               title: "Doctors",
                             ),
                             Container(
-                              height: (3 * 100).toDouble(),
+                              height: (doctors.length/2.ceil())* 100.toDouble(),
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               child: MediaQuery.removePadding(
                                 context: context,
                                 removeTop: true,
-                                child: GridView(
+                                child: GridView.builder(
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
@@ -223,32 +242,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           mainAxisSpacing: 10,
                                           crossAxisSpacing: 10),
                                   physics: NeverScrollableScrollPhysics(),
-                                  children: [
-                                    DocUnavailableTile(
-                                      name: "Dr Joshi",
-                                      speciality: "gendus",
-                                    ),
-                                    DocAvailableTile(
-                                      name: "Dr Joshi",
-                                      speciality: "gendus",
-                                    ),
-                                    DocUnavailableTile(
-                                      name: "Dr Joshi",
-                                      speciality: "gendus",
-                                    ),
-                                    DocAvailableTile(
-                                      name: "Dr Joshi",
-                                      speciality: "gendus",
-                                    ),
-                                    DocUnavailableTile(
-                                      name: "Dr Joshi",
-                                      speciality: "gendus",
-                                    ),
-                                    DocAvailableTile(
-                                      name: "Dr Joshi",
-                                      speciality: "gendus",
-                                    ),
-                                  ],
+                                  itemCount: doctors.length,
+                                  itemBuilder: (context,index){
+                                    return DocAvailTile(
+                                      name: doctors[index].d_name.toString(),
+                                      speciality: doctors[index].speciality.toString(),
+                                      isAvailable: doctors[index].status,
+                                    );
+                                  },
                                 ),
                               ),
                             ),
@@ -312,14 +313,16 @@ class TitleWidget extends StatelessWidget {
   }
 }
 
-class DocAvailableTile extends StatelessWidget {
-  const DocAvailableTile({
+class DocAvailTile extends StatelessWidget {
+  const DocAvailTile({
     Key key,
     this.name,
     this.speciality,
+    this.isAvailable,
   }) : super(key: key);
 
   final String name, speciality;
+  final bool isAvailable;
 
   @override
   Widget build(BuildContext context) {
@@ -327,11 +330,16 @@ class DocAvailableTile extends StatelessWidget {
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.7),
+          color: isAvailable
+              ? Colors.green.withOpacity(0.7)
+              : Colors.red.withOpacity(0.6),
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-                color: Colors.green.shade100, spreadRadius: 3, blurRadius: 6)
+                color:
+                    isAvailable ? Colors.green.shade100 : Colors.red.shade100,
+                spreadRadius: 3,
+                blurRadius: 6)
           ]),
       child: Row(
         children: [
@@ -343,84 +351,29 @@ class DocAvailableTile extends StatelessWidget {
           SizedBox(
             width: getProportionateScreenWidth(10),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: getProportionateScreenHeight(5),
-              ),
-              Text(
-                speciality,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class DocUnavailableTile extends StatelessWidget {
-  const DocUnavailableTile({
-    Key key,
-    this.name,
-    this.speciality,
-  }) : super(key: key);
-
-  final String name, speciality;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: Colors.red.withOpacity(0.6),
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.red.shade100, spreadRadius: 3, blurRadius: 6)
-          ]),
-      child: Row(
-        children: [
-          SvgPicture.asset(
-            "assets/images/doctor.svg",
-            width: getProportionateScreenWidth(40),
-            color: Colors.white,
-          ),
-          SizedBox(
-            width: getProportionateScreenWidth(10),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: getProportionateScreenHeight(5),
-              ),
-              Text(
-                speciality,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              )
-            ],
+          Container(
+            width: getProportionateScreenWidth(80),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: getProportionateScreenHeight(5),
+                ),
+                Text(
+                  speciality,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                )
+              ],
+            ),
           )
         ],
       ),

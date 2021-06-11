@@ -2,6 +2,7 @@
     package="com.example.hospital_app">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
    <application
         android:label="hospital_app"
