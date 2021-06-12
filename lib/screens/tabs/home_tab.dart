@@ -176,7 +176,7 @@ class _HomeTabState extends State<HomeTab> {
                         Icons.location_on,
                         color: Colors.red,
                       ),
-                      Text(widget.location??"Pune, Maharashtra",
+                      Text(widget.location??"No Location sent",
                           style: TextStyle(
                             fontSize: getProportionateScreenWidth(16),
                             fontWeight: FontWeight.w300,

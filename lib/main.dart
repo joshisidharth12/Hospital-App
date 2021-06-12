@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:geocoder/services/base.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hospital_app/screens/create_account/CreateAcc.dart';
 import 'package:hospital_app/screens/home_screen/home_screen.dart';
@@ -28,29 +27,9 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class AppState extends InheritedWidget {
-  const AppState({
-    Key key,
-    this.mode,
-    Widget child,
-  })  : assert(mode != null),
-        assert(child != null),
-        super(key: key, child: child);
-
-  final Geocoding mode;
-
-  static AppState of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AppState>();
-  }
-
-  @override
-  bool updateShouldNotify(AppState old) => mode != old.mode;
-}
-
 class _MyAppState extends State<MyApp> {
 
-  String latitude, longitube;
-  String location;
+  String location,add1,add2;
 
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
@@ -58,11 +37,13 @@ class _MyAppState extends State<MyApp> {
     double lat = position.latitude;
     double long = position.longitude;
 
-    latitude = '$lat';
-    longitube = '$long';
+    final coordinates = Coordinates(lat, long);
+    var address = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    add1 = address.first.locality;
+    add2 = address.first.subLocality;
 
     setState(() {
-      location = "Lat: $latitude, Long: $longitube";
+      location = "$add2, $add1";
     });
   }
 
