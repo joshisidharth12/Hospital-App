@@ -193,11 +193,6 @@ class _HomeTabState extends State<HomeTab> {
             UpdateFormButton(
               onPressed: () {
                 selectFile();
-                Fluttertoast.showToast(
-                    msg: "File uploaded successfully",
-                    toastLength: Toast.LENGTH_SHORT,
-                    textColor: Colors.green,
-                    gravity: ToastGravity.BOTTOM);
               },
             ),
             SizedBox(
@@ -343,7 +338,11 @@ class _HomeTabState extends State<HomeTab> {
     UploadTask uploadTask = reference.putData(asset);
     String url = await(await uploadTask).ref.getDownloadURL();
     await DatabaseService(uid: _auth.currentUser.uid).updatePdf(url);
-
+    Fluttertoast.showToast(
+        msg: "File uploaded successfully",
+        toastLength: Toast.LENGTH_SHORT,
+        textColor: Colors.green,
+        gravity: ToastGravity.BOTTOM);
   }
 
 }
