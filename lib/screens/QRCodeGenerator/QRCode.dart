@@ -13,7 +13,7 @@ class QRCodeGenerator extends StatefulWidget {
 class _QRCodeGeneratorState extends State<QRCodeGenerator> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  String _info,_age,_name,_emergencyNo;
+  String _info, _age, _name, _emergencyNo;
 
   checkAuth() async {
     _auth.authStateChanges().listen((user) {
@@ -66,17 +66,22 @@ class _QRCodeGeneratorState extends State<QRCodeGenerator> {
             Text(
               "Medical Report Link",
               style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontWeight: FontWeight.w700
-              ),
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700),
             ),
             SizedBox(
               height: getProportionateScreenHeight(10),
             ),
-            _info == null
+            _info == null || _info == "-1"
                 ? Center(
-                    child: CircularProgressIndicator(),
+                    child: Text(
+                      "Please Upload your PDF",
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w700),
+                    ),
                   )
                 : QrImage(
                     data: _info,
@@ -86,36 +91,32 @@ class _QRCodeGeneratorState extends State<QRCodeGenerator> {
               height: getProportionateScreenHeight(20),
             ),
             Text(
-              "Age : $_age" ,
+              "Age : $_age",
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
-                  fontWeight: FontWeight.w700
-              ),
+                  fontWeight: FontWeight.w700),
             ),
             SizedBox(
               height: getProportionateScreenHeight(20),
             ),
             Text(
-              "Name : $_name" ,
+              "Name : $_name",
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
-                  fontWeight: FontWeight.w700
-              ),
+                  fontWeight: FontWeight.w700),
             ),
             SizedBox(
               height: getProportionateScreenHeight(20),
             ),
             Text(
-              "Emergency Number : $_emergencyNo" ,
+              "Emergency Number : $_emergencyNo",
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
-                  fontWeight: FontWeight.w700
-              ),
+                  fontWeight: FontWeight.w700),
             ),
-
           ],
         ),
       ),

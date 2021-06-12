@@ -17,6 +17,11 @@ import 'package:hospital_app/size_config.dart';
 
 
 class HomeTab extends StatefulWidget {
+
+  final String location;
+
+  HomeTab({this.location});
+
   @override
   _HomeTabState createState() => _HomeTabState();
 }
@@ -171,7 +176,7 @@ class _HomeTabState extends State<HomeTab> {
                         Icons.location_on,
                         color: Colors.red,
                       ),
-                      Text("Pune, Maharashtra",
+                      Text(widget.location??"Pune, Maharashtra",
                           style: TextStyle(
                             fontSize: getProportionateScreenWidth(16),
                             fontWeight: FontWeight.w300,

@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hospital_app/screens/create_account/CreateAcc.dart';
 import 'package:hospital_app/screens/home_screen/home_screen.dart';
 import 'package:hospital_app/screens/login/login_screen.dart';
@@ -19,8 +20,35 @@ void main() async{
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  String latitude,longitube;
+
+  String location;
+
+  getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    var lat = position.latitude;
+    var long = position.longitude;
+
+    latitude = '$lat';
+    longitube = '$long';
+    setState(() {
+      location="Lat: $latitude, Long: $longitube";
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,7 +60,9 @@ class MyApp extends StatelessWidget {
         "Login" : (BuildContext context) => LoginScreen(),
         "SignUp" : (BuildContext context) => CreateAccount(),
         "SignUpOpt" : (BuildContext context) => SignUpOption(),
-        "HomeScreen" : (BuildContext context) => HomePage(),
+        "HomeScreen" : (BuildContext context) => HomePage(
+          location: location,
+        ),
       },
     );
   }

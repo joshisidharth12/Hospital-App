@@ -26,7 +26,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   final docReference = FirebaseDatabase.instance.reference().child('Doctors');
 
   String _pdf, _age, _name, _aptid;
-  List<DoctorModel> doctors = List();
+  List<DoctorModel> doctors = [];
 
   checkAuth() async {
     _auth.authStateChanges().listen((user) {
@@ -244,7 +244,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   physics: NeverScrollableScrollPhysics(),
                                   itemCount: doctors.length,
                                   itemBuilder: (context,index){
-                                    return DocAvailTile(
+                                    return doctors.length<=0 ? Center(child: CircularProgressIndicator(),) : DocAvailTile(
                                       name: doctors[index].d_name.toString(),
                                       speciality: doctors[index].speciality.toString(),
                                       isAvailable: doctors[index].status,

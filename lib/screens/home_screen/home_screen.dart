@@ -8,6 +8,11 @@ import 'package:hospital_app/screens/tabs/notifi_tab.dart';
 import 'package:hospital_app/screens/tabs/profileTab.dart';
 
 class HomePage extends StatefulWidget {
+
+  final String location;
+
+  HomePage({this.location});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -30,6 +35,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.location);
     return Scaffold(
         bottomNavigationBar: Bottomtabs(
           selectedTab: _selectedTab,
@@ -49,7 +55,9 @@ class _HomePageState extends State<HomePage> {
                   });
                 },
                 children: [
-                  HomeTab(),
+                  HomeTab(
+                    location: widget.location,
+                  ),
                   //Center(child: Text("Cart"),),
                   CartTab(),
                   ProfileTab()
