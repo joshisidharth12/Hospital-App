@@ -9,9 +9,10 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DatabaseService {
-
   final String uid;
+
   DatabaseService({this.uid});
+
   //collection reference
 
   final CollectionReference hospCollection =
@@ -21,7 +22,7 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('Users');
 
   final mainReference =
-  FirebaseDatabase.instance.reference().child('Appointments');
+      FirebaseDatabase.instance.reference().child('Appointments');
 
   String createCryptoRandomString([int length = 32]) {
     final Random _random = Random.secure();
@@ -29,15 +30,17 @@ class DatabaseService {
     return base64Url.encode(values);
   }
 
-  void documentFileUpload(
-      String name, String url, String age, String status,String apt) {
+  void documentFileUpload(String name, String url, String age, String status,
+      String apt, String dateTime,String hospName) {
     var data = {
       "pdf": url,
       "name": name,
       "age": age,
       "type": "PATIENT",
       "status": status,
-      "appointment_id": apt
+      "appointment_id": apt,
+      "timestamp": dateTime,
+      "hospName" : hospName
     };
 
     mainReference.child(apt).set(data).then((value) {
@@ -45,15 +48,17 @@ class DatabaseService {
     });
   }
 
-  void documentVictimFileUpload(
-      String name, String url,String emergNo, String age, String status,String apt) {
+  void documentVictimFileUpload(String name, String url, String emergNo,
+      String age, String status, String apt, String dateTime,String hospName) {
     var data = {
       "pdf": url,
       "name": name,
       "age": age,
       "type": "VICTIM",
       "status": status,
-      "appointment_id": apt
+      "appointment_id": apt,
+      "timestamp": dateTime,
+      "hospName" : hospName
     };
 
     mainReference.child(apt).set(data).then((value) {
@@ -61,39 +66,36 @@ class DatabaseService {
     });
   }
 
-  Future setUserData(String name,String emergencyNo, String age,) async{
-    return await userCollection.doc(uid).set({
-      'name' : name,
-      'emergencyNo' : emergencyNo,
-      'age': age,
-      'pdf': "-1"
-    });
+  Future setUserData(
+    String name,
+    String emergencyNo,
+    String age,
+  ) async {
+    return await userCollection.doc(uid).set(
+        {'name': name, 'emergencyNo': emergencyNo, 'age': age, 'pdf': "-1"});
   }
 
-  Future updatePdf(String url) async{
-    return await userCollection.doc(uid).update({
-      'pdf' : url
-    });
+  Future updatePdf(String url) async {
+    return await userCollection.doc(uid).update({'pdf': url});
   }
 
-
-  static Future<File> loadNetwork(String url) async{
+  static Future<File> loadNetwork(String url) async {
     final response = await http.get(url);
     final bytes = response.bodyBytes;
 
-    return _storeFile(url,bytes);
+    return _storeFile(url, bytes);
   }
 
-  static Future<File> _storeFile(String url,List<int> bytes) async{
+  static Future<File> _storeFile(String url, List<int> bytes) async {
     final filename = basename(url);
     final dir = await getApplicationDocumentsDirectory();
 
     final file = File('${dir.path}/$filename');
-    await file.writeAsBytes(bytes,flush: true);
+    await file.writeAsBytes(bytes, flush: true);
     return file;
   }
 
-  /*Stream<QuerySnapshot> get hosp{
+/*Stream<QuerySnapshot> get hosp{
     return hospCollection.snapshots();
   }*/
 }

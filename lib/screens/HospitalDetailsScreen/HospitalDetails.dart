@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hospital_app/model/hospitalModel.dart';
 import 'package:hospital_app/services/database.dart';
 import 'package:hospital_app/size_config.dart';
+import 'package:intl/intl.dart';
 
 class ProductDetails extends StatefulWidget {
   final String id, hospitalName;
@@ -25,7 +26,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   final docReference = FirebaseDatabase.instance.reference().child('Doctors');
 
-  String _pdf, _age, _name, _aptid;
+  String _pdf, _age, _name, _aptid,date_time;
   List<DoctorModel> doctors = [];
 
   checkAuth() async {
@@ -69,12 +70,15 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   void initState() {
     super.initState();
+    DateTime now = DateTime.now();
+    date_time = DateFormat('d-M-y '+':'+'H:m').format(now);
     checkAuth();
     getDoctor();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
             title: Text(
@@ -111,7 +115,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               } else {
                 _aptid = DatabaseService().createCryptoRandomString();
                 DatabaseService()
-                    .documentFileUpload(_name, _pdf, _age, "PENDING", _aptid);
+                    .documentFileUpload(_name, _pdf, _age, "PENDING", _aptid,date_time,widget.hospitalName);
                 Fluttertoast.showToast(
                     msg: "Appointment has been booked",
                     toastLength: Toast.LENGTH_SHORT,
