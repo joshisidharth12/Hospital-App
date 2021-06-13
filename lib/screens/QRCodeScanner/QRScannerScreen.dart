@@ -50,7 +50,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
   @override
   Widget build(BuildContext context){
 
-    Scaffold(
+    return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
