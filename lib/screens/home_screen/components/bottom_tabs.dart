@@ -38,7 +38,7 @@ class _BottomtabsState extends State<Bottomtabs> {
               },
             ),
             BottomTabBtn(
-              iconPath: Icons.medical_services,
+              iconPath: Icons.notifications_active,
               selected: _selectedTabs == 1 ? true : false,
                 onPressed: () {
                   widget.tabPressed(1);

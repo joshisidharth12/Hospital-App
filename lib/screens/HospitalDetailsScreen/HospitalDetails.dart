@@ -232,8 +232,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                             TitleWidget(
                               title: "Doctors",
                             ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(20),
+                            ),
                             Container(
-                              height: (doctors.length/2.ceil())* 100.toDouble(),
+                              height: (doctors.length/2.ceil())* 112.toDouble(),
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               child: MediaQuery.removePadding(
                                 context: context,
