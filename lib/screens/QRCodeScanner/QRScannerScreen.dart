@@ -43,7 +43,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
   void initState() {
     super.initState();
     DateTime now = DateTime.now();
-    date_time = DateFormat('E-M-y '+':'+'H-m').format(now);
+    date_time = DateFormat('d-M-y '+':'+'H-m').format(now);
     print(date_time);
   }
 
@@ -127,7 +127,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
                     CustomInput(
                       hintText: "Hospital Name",
                       iconImage: "assets/images/smartphone.png",
-                      keyBoardType: TextInputType.number,
+                      keyBoardType: TextInputType.text,
                       onSaved: (value) => _hospitalName = value,
                       count: 10,
                     ),
