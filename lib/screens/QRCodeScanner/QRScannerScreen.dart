@@ -129,7 +129,6 @@ class _QRScanScreenState extends State<QRScanScreen> {
                       iconImage: "assets/images/smartphone.png",
                       keyBoardType: TextInputType.text,
                       onSaved: (value) => _hospitalName = value,
-                      count: 10,
                     ),
                     SizedBox(
                       height: getProportionateScreenHeight(20),

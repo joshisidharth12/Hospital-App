@@ -375,7 +375,7 @@ class UpdateFormButton extends StatelessWidget {
                 color: Colors.white,
                 fontWeight: FontWeight.w700),
           ),
-          child: Text("UPDATE FORM")),
+          child: Text("UPLOAD PDF")),
     );
   }
 }

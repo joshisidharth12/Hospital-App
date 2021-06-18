@@ -31,7 +31,7 @@ class DatabaseService {
   }
 
   void documentFileUpload(String name, String url, String age, String status,
-      String apt, String dateTime,String hospName) {
+      String apt, String dateTime,String hospName, String emergencyNo) {
     var data = {
       "pdf": url,
       "name": name,
@@ -40,7 +40,8 @@ class DatabaseService {
       "status": status,
       "appointment_id": apt,
       "timestamp": dateTime,
-      "hospName" : hospName
+      "hospName" : hospName,
+      "emergencyNo" : emergencyNo
     };
 
     mainReference.child(apt).set(data).then((value) {
@@ -49,7 +50,7 @@ class DatabaseService {
   }
 
   void documentVictimFileUpload(String name, String url, String emergNo,
-      String age, String status, String apt, String dateTime,String hospName) {
+      String age, String status, String apt, String dateTime,String hospName,) {
     var data = {
       "pdf": url,
       "name": name,
@@ -58,7 +59,8 @@ class DatabaseService {
       "status": status,
       "appointment_id": apt,
       "timestamp": dateTime,
-      "hospName" : hospName
+      "hospName" : hospName,
+      "emergencyNo" : emergNo
     };
 
     mainReference.child(apt).set(data).then((value) {

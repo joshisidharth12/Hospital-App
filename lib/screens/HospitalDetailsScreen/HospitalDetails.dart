@@ -26,7 +26,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   final docReference = FirebaseDatabase.instance.reference().child('Doctors');
 
-  String _pdf, _age, _name, _aptid,date_time;
+  String _pdf, _age, _name, _aptid,date_time,_emergencyNo;
   List<DoctorModel> doctors = [];
 
   checkAuth() async {
@@ -49,6 +49,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         _pdf = value.data()['pdf'];
         _name = value.data()['name'];
         _age = value.data()['age'].toString();
+        _emergencyNo = value.data()['emergencyNo'].toString();
       });
     });
   }
@@ -115,7 +116,8 @@ class _ProductDetailsState extends State<ProductDetails> {
               } else {
                 _aptid = DatabaseService().createCryptoRandomString();
                 DatabaseService()
-                    .documentFileUpload(_name, _pdf, _age, "PENDING", _aptid,date_time,widget.hospitalName);
+                    .documentFileUpload(_name, _pdf, _age, "PENDING",
+                    _aptid,date_time,widget.hospitalName,_emergencyNo);
                 Fluttertoast.showToast(
                     msg: "Appointment has been booked",
                     toastLength: Toast.LENGTH_SHORT,
